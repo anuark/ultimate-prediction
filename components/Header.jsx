@@ -1,6 +1,16 @@
 import Image from 'next/image';
+import supabase from './supabase'
+import { useUser } from '@supabase/auth-helpers-react'
 
 const Header = () => {
+  async function signInWithDiscord() {
+    await supabase.auth.signIn({
+      provider: 'discord',
+    })
+  }
+
+  const { user } = useUser()
+
   return (
     <div className="mb-4 pt-3 px-2">
       <div className="flex items-center justify-between m-6">
@@ -32,20 +42,29 @@ const Header = () => {
           >
             transcripts
           </a> */}
-          {/*
-          <div className="float-right">
-              <button
-                className="btn-secondary flex-row-reverse"
+          {user ?
+            (<div className="float-right">
+              <a 
+                href='/api/auth/logout'
+                className="text-brand-light text-2xl lowercase font-semibold tracking-tighter inline"
               >
-                connect
+                Sign Out
+              </a>
+            </div>) :
+            (<div className="float-right">
+              <button
+                className="text-brand-light text-2xl lowercase font-semibold tracking-tighter inline"
+                onClick={signInWithDiscord}
+              >
+                Login
               </button>
-          </div>
-*/}
+            </div>)
+          }
+
         </div>
       </div>
     </div>
   )
-
 };
 
 export default Header;

@@ -14,7 +14,7 @@ const Card = (props) => {
           <Flag country="Iran" />
         </div>
         <div className="shrink-0 text-black m-auto">
-          <div className="text-center text-lime-500">'{ minute }</div>
+          <div className="text-center text-lime-500">&apos;{ minute }</div>
           <div className="">{ homeScore } - { awayScore }</div>
         </div>
         <div className="shrink-0">

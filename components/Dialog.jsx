@@ -12,7 +12,7 @@ function ExampleDialog(props) {
   return (
     <div>
       <button onClick={open}>Open Dialog</button>
-      <Dialog isOpen={showDialog} onDismiss={close}>
+      <Dialog isOpen={showDialog} onDismiss={close} aria-label="dialog">
         <button className="close-button" onClick={close}>
           <VisuallyHidden>Close</VisuallyHidden>
           <span aria-hidden>×</span>

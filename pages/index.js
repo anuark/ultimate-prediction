@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css'
 import Header from '../components/Header.jsx'
 import Card from '../components/Card.jsx'
 import Footer from '../components/Footer.jsx'
+import { useUser } from '@supabase/auth-helpers-react'
 
 export default function Home() {
   const matches = [
@@ -13,7 +14,7 @@ export default function Home() {
       homeScore: 0,
       awayScore: 1,
       minute: 80,
-      predicted: true
+      predicted: false
     },
     {
       home: 'Iran',
@@ -37,6 +38,9 @@ export default function Home() {
       minute: 80
     },
   ];
+  const user = useUser()
+  console.log({ key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY })
+    console.log({ user })
   return (
     <>
       <Header />

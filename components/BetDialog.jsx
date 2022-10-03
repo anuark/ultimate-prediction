@@ -15,7 +15,7 @@ function BetDialog(props) {
       <div className="text-center pt-3">
         <button className="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-800 focus:outline-none dark:bg-cyan-600 dark:hover:bg-cyan-700" onClick={open}>Predict</button>
       </div>
-      <Dialog isOpen={showDialog} onDismiss={close} className="" style={{width: '30vh'}}>
+      <Dialog isOpen={showDialog} onDismiss={close} className="" style={{width: '30vh'}} aria-labelledby='asdqwe'>
         <button className="close-button float-right" onClick={close}>
           <VisuallyHidden>Close</VisuallyHidden>
           <span className="text-fuchsia-500" aria-hidden>×</span>

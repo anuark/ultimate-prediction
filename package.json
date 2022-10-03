@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,6 +11,9 @@
   "dependencies": {
     "@reach/dialog": "^0.17.0",
     "@reach/visually-hidden": "^0.17.0",
+    "@supabase/auth-helpers-nextjs": "^0.2.9",
+    "@supabase/auth-helpers-react": "^0.2.4",
+    "@supabase/supabase-js": "^1.35.7",
     "autoprefixer": "^10.4.8",
     "flag-icons": "^6.6.6",
     "next": "12.2.5",
