@@ -1,10 +1,11 @@
-import Image from 'next/image';
-import supabase from './supabase'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useUser } from '@supabase/auth-helpers-react'
+import { supabaseClient } from '@supabase/auth-helpers-nextjs'
 
 const Header = () => {
   async function signInWithDiscord() {
-    await supabase.auth.signIn({
+    await supabaseClient.auth.signIn({
       provider: 'discord',
     })
   }
@@ -22,12 +23,12 @@ const Header = () => {
             width="50px"
             height="50px"
           />
-          <a
+          <Link
             href={'/'}
             className="text-brand-light text-3xl lowercase font-semibold tracking-tighter inline"
           >
             Ultimate Bet
-          </a>
+          </Link>
         </div>
         <div className="flex items-center gap-10">
           <a
@@ -44,12 +45,12 @@ const Header = () => {
           </a> */}
           {user ?
             (<div className="float-right">
-              <a 
+              <Link 
                 href='/api/auth/logout'
                 className="text-brand-light text-2xl lowercase font-semibold tracking-tighter inline"
               >
                 Sign Out
-              </a>
+              </Link>
             </div>) :
             (<div className="float-right">
               <button
