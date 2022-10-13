@@ -1,17 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useUser } from '@supabase/auth-helpers-react'
-import { supabaseClient } from '@supabase/auth-helpers-nextjs'
 
 const Header = () => {
-    async function signInWithDiscord() {
-        await supabaseClient.auth.signIn({
-            provider: 'discord',
-        }, {
-            redirectTo: 'http://localhost:3000/redirect'
-        })
-    }
-
     const { user } = useUser()
 
     return (
