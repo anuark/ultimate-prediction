@@ -1,23 +1,43 @@
 // components/ExampleDialog.js
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog } from '@reach/dialog'
 import VisuallyHidden from '@reach/visually-hidden'
 import '@reach/dialog/styles.css'
 import { useUser } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
+import axios from 'axios'
+
+async function castVote(postData) {
+    return axios.post('/api/vote', {
+        data: postData
+    })
+}
 
 function BetDialog(props) {
     const router = useRouter()
     const { user } = useUser()
-    const { home, away, id } = props
+    const { home_team, away_team, id, voted_for } = props
 
     const [showDialog, setShowDialog] = useState(false)
-    const open = () => setShowDialog(true)
+    const [votedFor, setVotedFor] = useState(false)
+
+    useEffect(() => {
+        setVotedFor(voted_for)
+    }, [voted_for])
+
+    const open = () => {
+        if (!user) {
+            router.push('/auth')
+            return
+        }
+        setShowDialog(true)
+    }
     const close = () => setShowDialog(false)
 
-    // TODO: save vote for user
-    // TODO: handle buttons coloring
-    // TODO: close modal after voting
+    const afterVote = (vote) => {
+        setVotedFor(vote)
+        close();
+    }
 
     const vote = (type, matchId) => {
         if (!user) {
@@ -29,67 +49,59 @@ function BetDialog(props) {
 
         if (type === 'home') {
             console.log('voted home' + matchId)
-            // document.getElementById('home' + matchId)
-            //     .className = 'btn btn-primary';
-            // document.getElementById('draw-' + matchId)
-            //     .className = 'btn btn-secondary';
-            // document.getElementById('away-' + matchId)
-            //     .className = 'btn btn-secondary';
+            // adding green to home and removing green to the other buttons
+            document.getElementById('home-' + matchId).classList.replace('bg-cyan-700', 'bg-green-700')
+            console.log('replaced')
+            document.getElementById('draw-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
+            document.getElementById('away-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
 
-            // castVote(user, matchId, 'home');
+            castVote({ players_id: user.id, games_id: matchId, voted_for: 'home' }).then(() => afterVote('home'))
         } else if (type === 'draw') {
             console.log('voted draw' + matchId)
-            // document.getElementById(matchId + '-home')
-            //     .className = 'btn btn-secondary';
-            // document.getElementById(matchId + '-draw')
-            //     .className = 'btn btn-primary';
-            // document.getElementById(matchId + '-away')
-            //     .className = 'btn btn-secondary';
+            document.getElementById('home-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
+            document.getElementById('draw-' + matchId).classList.replace('bg-cyan-700', 'bg-green-700')
+            document.getElementById('away-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
 
-            // castVote(user, matchId, 'draw');
+            castVote({ players_id: user.id, games_id: matchId, voted_for: 'draw' }).then(() => afterVote('draw'))
         } else if (type === 'away') {
-            console.log('voted draw' + matchId)
-            // document.getElementById(matchId + '-home')
-            //     .className = 'btn btn-secondary';
-            // document.getElementById(matchId + '-draw')
-            //     .className = 'btn btn-secondary';
-            // document.getElementById(matchId + '-away')
-            //     .className = 'btn btn-primary';
-
-            // castVote(user, matchId, 'away');
+            console.log('voted away' + matchId)
+            document.getElementById('home-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
+            document.getElementById('draw-' + matchId).classList.replace('bg-green-700', 'bg-cyan-700')
+            document.getElementById('away-' + matchId).classList.replace('bg-cyan-700', 'bg-green-700')
+            castVote({ players_id: user.id, games_id: matchId, voted_for: 'away' }).then(() => afterVote('away'))
         }
     }
 
     return (
         <div>
             <div className="text-center pt-3">
-                <button className="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-800 focus:outline-none dark:bg-cyan-600 dark:hover:bg-cyan-700" onClick={open}>Predict</button>
+                <button className={`inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white rounded-lg ${votedFor ? 'bg-green-700 hover:bg-green-800' : 'bg-cyan-700 hover:bg-cyan-800'} focus:outline-none`} onClick={open}>{ votedFor ? `voted: ${votedFor}` : 'Predict'}</button>
             </div>
-            <Dialog isOpen={showDialog} onDismiss={close} className="" style={{ width: '30vh' }} aria-labelledby='asdqwe'>
+            <Dialog isOpen={showDialog} onDismiss={close} className="" style={{ width: '50vh' }} aria-labelledby='asdqwe'>
                 <button className="close-button float-right" onClick={close}>
                     <VisuallyHidden>Close</VisuallyHidden>
                     <span className="text-fuchsia-500" aria-hidden>×</span>
                 </button>
 
                 <p className="text-black text-xl p-6">Choose your prediction</p>
-                <div className={`flex space-x-6 items-center `}>
+                <div className={`flex space-x-6 items-center`}>
                     <button
-                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none dark:bg-cyan-600 dark:hover:bg-cyan-700"}
+                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none"}
                         id={`home-${id}`}
-                        onClick={vote('home', id)}
-                    >{home}</button>
+                        onClick={() => vote('home', id)}
+                    >{home_team}</button>
 
                     <button
-                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none dark:bg-cyan-600 dark:hover:bg-cyan-700"}
+                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none"}
                         id={`draw-${id}`}
-                        onClick={vote('draw', id)}
+                        onClick={() => vote('draw', id)}
                     >Draw</button>
 
                     <button
-                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none dark:bg-cyan-600 dark:hover:bg-cyan-700"}
+                        className={"inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-cyan-700 rounded-lg hover:bg-cyan-900 focus:outline-none"}
                         id={`away-${id}`}
-                        onClick={vote('away', id)}
-                    >{away}</button>
+                        onClick={() => vote('away', id)}
+                    >{away_team}</button>
                 </div>
             </Dialog >
         </div >

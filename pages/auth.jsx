@@ -9,7 +9,7 @@ export default function Auth() {
         await supabaseClient.auth.signIn({
             provider: 'google',
         }, {
-            redirectTo: 'http://localhost:3000/redirect'
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/redirect`
         })
     }
 
@@ -17,7 +17,7 @@ export default function Auth() {
         await supabaseClient.auth.signIn({
             provider: 'discord',
         }, {
-            redirectTo: 'http://localhost:3000/redirect'
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/redirect`
         })
     }
 
@@ -29,6 +29,7 @@ export default function Auth() {
         flex items-center justify-center">
                     <div className="w-full h-100">
                         <p className="text-xl font-bold leading-tight mt-12 text-black text-center mb-8">Ultimate Prediction Tournament</p>
+                            {/*
                         <button type="button" onClick={signInWithGoogle} className="w-full mb-4 block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300">
                             <div className="flex items-center justify-center">
                                 <FcGoogle size='2em' />
@@ -37,7 +38,7 @@ export default function Auth() {
                                     with
                                     Google</span>
                             </div>
-                        </button>
+                        </button>*/}
 
                         <button type="button" onClick={signInWithDiscord} className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-white font-semibold rounded-lg px-4 py-3 border border-gray-300" style={{ backgroundColor: '#5562ea' }}>
                             <div className="flex items-center justify-center">
