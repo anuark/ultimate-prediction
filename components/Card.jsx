@@ -8,7 +8,7 @@ const Card = (props) => {
     const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     return (
-        <div className={'p-6 max-w-sm mx-autorounded-xl shadow-lg border border-r-blue-100 rounded-lg' + (predicted ? ' bg-green-100' : ' bg-gray-100')}>
+        <div className={'p-6 max-w-sm mx-autorounded-xl shadow-lg border border-r-blue-100 rounded-lg' + (predicted ? ' bg-green-100' : (status === 'played' ? ' bg-blue-100' : ' bg-gray-100'))}>
             <p className='text-black text-xl text-center pb-6'>{_date.toLocaleDateString('en-EN', dateOpts)}</p>
             <div className='flex justify-center space-x-2 h-space'>
                 <div className='shrink-0'>

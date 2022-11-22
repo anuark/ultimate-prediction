@@ -59,6 +59,7 @@ export default async function harvest(): Promise<void> {
 
     const page = await browser.newPage();
     await page.goto('https://www.skysports.com/world-cup-fixtures');
+    // await delay(999999)
     const data = await page.$eval('.fixres__body', (el) => {
         const data: string[] = [];
         Array.from(el.children).forEach((v: any) => {
@@ -127,7 +128,6 @@ export default async function harvest(): Promise<void> {
             // console.log({ hour, mins, time })
             date = date.set('hour', hour as any).set('minute', mins as any);
             date = date.subtract(tzOffset, 'minute');
-            // console.log({ date });
             games.push({ date: date.toDate(), homeTeam, awayTeam, homeScore, awayScore, status });
         }
     });
@@ -141,19 +141,16 @@ export default async function harvest(): Promise<void> {
         }
 
         if (game?.id) {
-            console.log({ game })
-            console.log('updating game')
-            const res = await supabase.from('games').update({ home_score: g.homeScore, away_score: g.awayScore }).eq('id', game.id)
-            console.log({ res })
+            await supabase.from('games').update({ home_score: g.homeScore, away_score: g.awayScore, date: g.date, status: g.status }).eq('id', game.id)
         } else {
-            const _d = dayjs(Date.now() + 1000 * 60 * (i + 1))
+            // const _d = dayjs(Date.now() + 1000 * 60 * (i + 1))
             await supabase.from('games').insert({
                 home_team: g.homeTeam,
                 away_team: g.awayTeam,
                 home_score: g.homeScore,
                 away_score: g.awayScore,
-                // date: g.date,
-                date: _d.toDate(),
+                date: g.date,
+                // date: _d.toDate(),
                 status: g.status
             })
         }

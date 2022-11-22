@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Cache-Control', 'no-store')
 
     const { user_id } = req.query
-    const { data: games, error } = await supabase.from('games').select()
+    const { data: games, error } = await supabase.from('games').select().order('date', { ascending: true })
 
     if (error) {
         console.error(error)

@@ -82,7 +82,7 @@ function BetDialog(props) {
     return (
         <div>
             <div className="text-center pt-3">
-                <button className={`inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white rounded-lg ${votedFor ? 'bg-green-700 hover:bg-green-800' : 'bg-cyan-700 hover:bg-cyan-800'} focus:outline-none`} onClick={open}>{ votedFor ? `voted: ${votedFor}` : 'Predict'}</button>
+                <button className={`inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white rounded-lg ${votedFor ? 'bg-green-700 hover:bg-green-800' : 'bg-cyan-700 hover:bg-cyan-800'} focus:outline-none`} onClick={open}>{ votedFor ? `voted: ${votedFor}` : (status === 'played' ? 'Already played' : 'Predict')}</button>
             </div>
             <Dialog isOpen={showDialog} onDismiss={close} className="" style={{ width: '50vh' }} aria-labelledby='asdqwe'>
                 <button className="close-button float-right" onClick={close}>
