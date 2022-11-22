@@ -16,7 +16,7 @@ async function castVote(postData) {
 function BetDialog(props) {
     const router = useRouter()
     const { user } = useUser()
-    const { home_team, away_team, id, voted_for } = props
+    const { home_team, away_team, id, voted_for, status } = props
 
     const [showDialog, setShowDialog] = useState(false)
     const [votedFor, setVotedFor] = useState(false)
@@ -30,6 +30,12 @@ function BetDialog(props) {
             router.push('/auth')
             return
         }
+
+        if (status != 'not-played') {
+            console.log('not-played')
+            return
+        }
+
         setShowDialog(true)
     }
     const close = () => setShowDialog(false)
@@ -40,10 +46,11 @@ function BetDialog(props) {
     }
 
     const vote = (type, matchId) => {
-        if (!user) {
+        if (!user || status != 'not-played') {
             // setAlert({ variant: 'info', text: 'You need to login first' });
             // navigate('/auth');
             // router.push('/auth')
+            console.log('cancelled vote')
             return;
         }
 

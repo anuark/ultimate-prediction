@@ -8,6 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data: games, error } = await supabase.from('games').select()
 
     if (error) {
+        console.error(error)
         return res.status(500).json({ message: 'supabase is down' })
     }
 

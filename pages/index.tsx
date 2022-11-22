@@ -14,7 +14,7 @@ function useGames(d) {
 
 export default function Home() {
     const { user } = useUser()
-    console.log('userid'+ user?.id)
+    console.log('userid' + user?.id)
     const { data, isError, isLoading } = useGames({ user_id: user?.id });
 
     // TODO: scheduler script for updating matches data
@@ -22,7 +22,7 @@ export default function Home() {
 
     return (
         <>
-            <div className="container">
+            <div className="container mx-auto mb-12">
                 <Header />
                 {isLoading ? (
                     'loading'
@@ -41,13 +41,14 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  )
+    res.setHeader(
+        'Cache-Control',
+        // 'public, s-maxage=10, stale-while-revalidate=59'
+        'no-store'
+    )
 
-  return {
-    props: {},
-  }
+    return {
+        props: {},
+    }
 }
 
